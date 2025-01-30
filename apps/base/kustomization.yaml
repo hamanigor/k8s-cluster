@@ -1,0 +1,9 @@
+resources:
+# ConfigMaps
+  - values/gitlab-values.yaml
+
+
+
+#Helm Releases
+
+  - helm-releases/gitlab-hr.yaml

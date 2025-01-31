@@ -21,11 +21,11 @@ spec:
   interval: 1m
   chart:
     spec: 
-      chart: plantuml
+      chart: ./ 
       sourceRef:
-        king: helmRepository
+        king: GitRepository
         name: plantuml
       interval: 1m 
     valuesfrom:
     - kind: ConfigMap 
-      name: plantuml-values
+      name: plantuml-values-base

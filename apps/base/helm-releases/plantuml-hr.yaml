@@ -7,7 +7,7 @@ spec:
   interval: 5m
   url: https://github.com/hamanigor/plantuml-helm-charts.git
   ref:
-    tag:
+    tag: 3.36.0
   secretRef:
     name: github-secret
   

@@ -1,0 +1,9 @@
+resources:
+# ConfigMaps
+  - values/plantuml-values.yaml
+
+
+
+#Helm Releases
+
+  - helm-releases/plantuml-hr.yaml

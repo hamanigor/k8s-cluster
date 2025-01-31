@@ -23,11 +23,11 @@ spec:
     spec: 
       chart: ./ 
       sourceRef:
-        king: GitRepository
+        king: helmRepository
         name: plantuml
       interval: 1m 
   driftDetection: 
     mode: enabled
   valuesfrom:
     - kind: ConfigMap 
-      name: plantuml-values-base
+      name: plantuml-values

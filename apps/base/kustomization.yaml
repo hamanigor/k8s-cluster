@@ -1,9 +1,9 @@
 resources:
 # ConfigMaps
-  - values/gitlab-values.yaml
+  - values/plantuml-values.yaml
 
 
 
 #Helm Releases
 
-  - helm-releases/gitlab-hr.yaml
+  - helm-releases/plantuml-hr.yaml

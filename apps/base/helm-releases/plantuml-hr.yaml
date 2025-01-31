@@ -21,13 +21,11 @@ spec:
   interval: 1m
   chart:
     spec: 
-      chart: ./ 
+      chart: plantuml
       sourceRef:
         king: helmRepository
         name: plantuml
       interval: 1m 
-  driftDetection: 
-    mode: enabled
-  valuesfrom:
+    valuesfrom:
     - kind: ConfigMap 
       name: plantuml-values

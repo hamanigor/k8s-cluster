@@ -1,0 +1,33 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: plantuml
+  namespace: plantuml 
+spec:
+  interval: 5m
+  url: https://github.com/hamanigor/plantuml-helm-charts.git
+  ref:
+    tag:
+  secretRef:
+    name: github-secret
+  
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRelease 
+metadata:
+  name: plantuml
+  namespace: plantuml 
+spec:
+  interval: 1m
+  chart:
+    spec: 
+      chart: ./ 
+      sourceRef:
+        king: GitRepository
+        name: plantuml
+      interval: 1m 
+  driftDetection: 
+    mode: enabled
+  valuesfrom:
+    - kind: ConfigMap 
+      name: plantuml-values-base

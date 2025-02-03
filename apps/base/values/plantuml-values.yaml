@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: plantuml-values
+  name: plantuml-values-base
   namespace: plantuml
 data:
   values.yaml: |
@@ -14,79 +14,4 @@ data:
     imagePullSecrets: 
       - name: docker-hub-cred 
 
-    service:
-      type: ClusterIP
-      port: 80
-
-    ingress:
-      enabled: true
-      annotations: {}.
-    ingressClassName:
-    hosts: []
-    tls: []
-
-    replicaCount: 1
-
-    autoscaling:
-      enabled: false
-      minReplicas: 1
-      maxReplicas: 3
-      targetCPUUtilizationPercentage: 80
-      targetMemoryUtilizationPercentage:
-
-    podDisruptionBudget:
-      enabled: false
-      minAvailable:
-      maxUnavailable:
-      unhealthyPodEvictionPolicy:
-
-    maxUnavailable: 0
     
-    podSecurityContext:
-      runAsNonRoot: true
-      fsGroup: 65534
-      seccompProfile:
-        type: RuntimeDefault
-
-    priorityClassName:
-
-    terminationGracePeriodSeconds:
-  
-    securityContext:
-      privileged: false
-      allowPrivilegeEscalation: false
-      readOnlyRootFilesystem: true
-      runAsNonRoot: true
-      runAsUser: 999
-      runAsGroup: 999
-      capabilities:
-        drop:
-          - ALL
-
-    env: []
-
-    args: []
-
-    livenessProbe:
-      httpGet:
-        path: /png
-        port: http
-
-    readinessProbe:
-      httpGet:
-        path: /png
-        port: http
-
-    resources: {}
-
-    nodeSelector: {}
-
-    affinity: {}
-
-    topologySpreadConstraints: []
-
-    tolerations: []
-
-    caCerts:
-    enabled: false
-    secret:

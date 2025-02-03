@@ -21,9 +21,9 @@ spec:
   interval: 1m
   chart:
     spec: 
-      chart: ./ 
+      chart: plantuml
       sourceRef:
-        king: GitRepository
+        kind: GitRepository
         name: plantuml
       interval: 1m 
     valuesfrom:

@@ -6,7 +6,6 @@ metadata:
 spec: 
   internal: 10m0s
   path: ./apps/base
-  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system

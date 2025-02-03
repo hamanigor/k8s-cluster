@@ -26,6 +26,6 @@ spec:
         kind: GitRepository
         name: plantuml
       interval: 1m 
-    valuesFrom:
+  valuesFrom:
     - kind: ConfigMap 
       name: plantuml-values-base

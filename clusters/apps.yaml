@@ -4,8 +4,9 @@ metadata:
   name: apps-base
   namespace: flux-system
 spec: 
-  internal: 10m0s
+  interval: 10m0s
   path: ./apps/base
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system

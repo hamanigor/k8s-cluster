@@ -28,4 +28,4 @@ spec:
       interval: 1m 
   valuesFrom:
     - kind: ConfigMap 
-      name: plantuml-values-base
+      name: plantuml-values

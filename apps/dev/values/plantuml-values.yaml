@@ -16,7 +16,9 @@ data:
     service:
       type: ClusterIP
       port: 8080
-
+      targetPort: 8080
+      name: http
+    
     ingress:
       enabled: true
       annotations: {}.
@@ -74,7 +76,7 @@ data:
     readinessProbe:
       httpGet:
         path: /png
-        port: 8080
+        port: http
    
     containerPorts:
       http: 8080

@@ -7,9 +7,8 @@ data:
   values.yaml: |
     image:
       repository: 19901/plantuml
-      tag: 1
+      tag: "1"
       pullPolicy: IfNotPresent
-      pullSecrets: docker-hub-cred 
 
     imagePullSecrets: 
       - name: docker-hub-cred 

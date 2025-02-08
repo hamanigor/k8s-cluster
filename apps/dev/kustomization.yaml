@@ -1,9 +1,10 @@
 resources:
 # ConfigMaps
   - values/plantuml-values.yaml
-
+  - values/renovate-values.yaml
 
 
 #Helm Releases
 
   - helm-releases/plantuml-hr.yaml
+  - helm-releases/renovate-hr.yaml

@@ -1,0 +1,76 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: renovate-values 
+  namespace: renovate
+data:
+  values.yaml: |
+    global:
+      commonLabels: {}
+      compatibility:
+        openshift:
+          adaptSecurityContext: 'auto'
+
+    nameOverride: 'renovate'
+    fullnameOverride: 'renovate'
+
+    cronjob:
+      schedule: '0 1 * * *'
+      suspend: false
+      concurrencyPolicy: 'Forbid'
+      jobRestartPolicy: Never
+      successfulJobsHistoryLimit: 3
+      failedJobsHistoryLimit: 1
+
+    image:
+      registry: ghcr.io
+      repository: renovatebot/renovate
+      tag: 39.164.0
+      pullPolicy: IfNotPresent
+
+    renovate:
+      existingConfigFile: ''
+      config: |
+        {
+          "platform": "github",
+          "token": "YOUR_GITHUB_TOKEN",
+          "autodiscover": true,
+          "dryRun": false,
+          "repositories": ["your-org/your-repo"]
+        }
+      configEnableHelmTpl: false
+      configIsSecret: true
+      configIsJavaScript: false
+      securityContext: {}
+      persistence:
+        cache:
+          enabled: false
+
+    serviceAccount:
+      create: false
+      name: 'flux-renovate-sa'
+
+    env:
+      GITHUB_COM_TOKEN: "YOUR_GITHUB_TOKEN"
+
+    resources:
+      limits:
+        cpu: 500m
+        memory: 512Mi
+      requests:
+        cpu: 250m
+        memory: 256Mi
+
+    tolerations: []
+    affinity: {}
+    nodeSelector: {}
+
+    extraObjects:
+      - apiVersion: source.toolkit.fluxcd.io/v1beta2
+        kind: HelmRepository
+        metadata:
+          name: renovate
+          namespace: flux-system
+        spec:
+          interval: 10m
+          url: https://docs.renovatebot.com/helm-charts/

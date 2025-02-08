@@ -1,0 +1,31 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: renovate
+  namespace: renovate
+spec:
+  interval: 5m
+  url: https://github.com/hamanigor/renovate-helm-chart.git
+  ref:
+    tag: renovate-39.164.0
+  secretRef:
+    name: github-secret
+  
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease 
+metadata:
+  name: renovate
+  namespace: renovate
+spec:
+  interval: 1m
+  chart:
+    spec: 
+      chart: renovate
+      sourceRef:
+        kind: GitRepository
+        name: renovate
+      interval: 1m 
+  valuesFrom:
+    - kind: ConfigMap 
+      name: renovate-values-base

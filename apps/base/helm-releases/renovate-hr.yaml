@@ -18,7 +18,7 @@ metadata:
   name: renovate
   namespace: renovate
 spec:
-  interval: 1m
+  interval: 2m
   chart:
     spec: 
       chart: renovate

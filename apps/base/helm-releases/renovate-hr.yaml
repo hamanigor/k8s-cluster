@@ -7,7 +7,7 @@ spec:
   interval: 5m
   url: https://github.com/hamanigor/renovate-helm-chart.git
   ref:
-    tag: renovate-39.164.0
+    tag: 39.164.0
   secretRef:
     name: github-secret
   
@@ -18,7 +18,7 @@ metadata:
   name: renovate
   namespace: renovate
 spec:
-  interval: 2m
+  interval: 1m
   chart:
     spec: 
       chart: renovate

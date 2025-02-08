@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: renovate-values-base
+  namespace: renovate
+data:
+  values.yaml: |
+    image:
+      repository: docker.io/19901/renovate
+      tag: "1"
+      pullPolicy: IfNotPresent 
+
+    imagePullSecrets: 
+      - name: docker-hub-cred 

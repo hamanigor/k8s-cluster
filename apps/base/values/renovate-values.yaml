@@ -7,7 +7,7 @@ data:
   values.yaml: |
     image:
       repository: docker.io/19901/renovate
-      tag: "1"
+      tag: "39.164.0"
       pullPolicy: IfNotPresent 
 
     imagePullSecrets: 

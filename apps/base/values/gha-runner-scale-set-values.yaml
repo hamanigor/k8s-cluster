@@ -5,7 +5,7 @@ metadata:
   namespace: gha-runner-scale-set
 data:
   values.yaml: |
-    githubConfigUrl: "https://github.com/hamanigor"
+    githubConfigUrl: "https://github.com/power-Igor"
     githubConfigSecret: "gha-github"
 
     runnerScaleSetName: "arc-java"

@@ -6,7 +6,7 @@ metadata:
 data:
   values.yaml: |
     githubConfigUrl: "https://github.com/hamanigor"
-    githubConfigSecret: "gha-github-pat"
+    githubConfigSecret: "gha-github"
 
     runnerScaleSetName: "arc-java"
     minRunners: 0

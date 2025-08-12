@@ -13,13 +13,7 @@ data:
     maxRunners: 10
 
     containerMode:
-      type: "kubernetes"
-
-    kubernetesModeWorkVolumeClaim:
-      accessModes: ["ReadWriteOnce"]
-      resources:
-        requests:
-          storage: 10Gi
+      type: dind
 
     template:
       spec:

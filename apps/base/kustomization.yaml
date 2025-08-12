@@ -10,4 +10,4 @@ resources:
 
   - helm-releases/plantuml-hr.yaml
   - helm-releases/renovate-hr.yaml
-  - helm-release/gha-runner-scale-set-controller-hr.yaml
+  - helm-releases/gha-runner-scale-set-controller-hr.yaml

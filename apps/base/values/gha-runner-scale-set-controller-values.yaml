@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name:  gha-runner-scale-set-controller-values-base
-  namespace: renovate
+  namespace: gha-runner-scale-set-controller
 data:
   values.yaml: |
     image:

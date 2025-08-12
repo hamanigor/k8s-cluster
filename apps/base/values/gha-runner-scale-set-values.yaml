@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name:  gha-runner-scale-set-values-base
+  name: gha-runner-scale-set-values-base
   namespace: gha-runner-scale-set
 data:
   values.yaml: |
-    githubConfigUrl: https://github.com/hamanigor
-    githubConfigSecret: github-secret
-    
+    githubConfigUrl: "https://github.com/hamanigor"
+    githubConfigSecret: "github-secret"
+
     runnerScaleSetName: "arc-java"
     minRunners: 0
     maxRunners: 10
@@ -21,13 +21,13 @@ data:
         requests:
           storage: 10Gi
 
-     template:
+    template:
       spec:
         imagePullSecrets:
-          - name:  docker-hub-cred        
+          - name: docker-hub-cred
         containers:
           - name: runner
-            image: "19901/runner-java:1.0.0"   
+            image: "19901/runner-java:1.0.0"
             env:
               - name: RUNNER_LABELS
                 value: "arc,java"
@@ -37,4 +37,4 @@ data:
                 memory: "2Gi"
               limits:
                 cpu: "4"
-                memory: "6Gi"
+                memory: "6Gi

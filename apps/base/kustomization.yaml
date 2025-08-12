@@ -2,6 +2,7 @@ resources:
 # ConfigMaps
   - values/plantuml-values.yaml
   - values/renovate-values.yaml
+  - values/gha-runner-scale-set-controller-values.yaml
 
 
 
@@ -9,3 +10,4 @@ resources:
 
   - helm-releases/plantuml-hr.yaml
   - helm-releases/renovate-hr.yaml
+  - helm-release/gha-runner-scale-set-controller-hr.yaml

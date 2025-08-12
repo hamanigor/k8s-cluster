@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name:  gha-runner-scale-set-controller-values-base
+  namespace: gha-runner-scale-set-controller
+data:
+  values.yaml: |
+    image:
+      repository: 19901/gha-runner-scale-set-controller
+      tag: 0.12.1
+    imagePullSecrets:
+      - name: docker-hub-cred 
+
+
+    serviceAccount:
+      create: true
+      name:  gha-runner-scale-set-controller-sa

@@ -20,7 +20,7 @@ data:
       resources:
         requests:
           storage: 10Gi
-    template:      # fixing template
+    template:  
       spec:
         imagePullSecrets:
           - name: docker-hub-cred
@@ -30,10 +30,4 @@ data:
             env:
               - name: RUNNER_LABELS
                 value: "arc,java"
-            resources:
-              requests:
-                cpu: "1"
-                memory: "2Gi"
-              limits:
-                cpu: "4"
-                memory: "6Gi
+          

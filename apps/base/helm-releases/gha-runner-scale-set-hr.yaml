@@ -29,3 +29,7 @@ spec:
   valuesFrom:
     - kind: ConfigMap 
       name: gha-runner-scale-set-values-base
+  values: 
+    controllerServiceAccount:
+    name: gha-runner-scale-set-controller-sa
+    namespace: gha-runner-scale-set-controller

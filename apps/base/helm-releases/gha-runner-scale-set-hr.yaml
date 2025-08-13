@@ -10,26 +10,27 @@ spec:
     tag: 0.12.1
   secretRef:
     name: github-secret
-  
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
-kind: HelmRelease 
+kind: HelmRelease
 metadata:
   name: gha-runner-scale-set
   namespace: gha-runner-scale-set
 spec:
   interval: 1m
+  targetNamespace: gha-runner-scale-set
   chart:
-    spec: 
+    spec:
       chart: gha-runner-scale-set
       sourceRef:
         kind: GitRepository
         name: gha-runner-scale-set
-      interval: 1m 
+      interval: 1m
   valuesFrom:
-    - kind: ConfigMap 
+    - kind: ConfigMap
       name: gha-runner-scale-set-values-base
-  values: 
+      valuesKey: values.yaml
+  values:
     controllerServiceAccount:
-    name: gha-runner-scale-set-controller-sa
-    namespace: gha-runner-scale-set-controller
+      name: gha-runner-scale-set-controller-sa
+      namespace: gha-runner-scale-set-controller

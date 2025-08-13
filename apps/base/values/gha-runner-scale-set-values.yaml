@@ -9,14 +9,25 @@ data:
     githubConfigSecret: "gha-github-pat"
 
     runnerScaleSetName: "arc-java"
-    minRunners: 0
+    minRunners: 1
     maxRunners: 10
+
+    controllerServiceAccount:
+      name: gha-runner-scale-set-controller-sa
+      namespace: gha-runner-scale-set-controller
 
     containerMode:
       type: dind
 
     template:
       spec:
+        tolerations:
+          - key: "node-role.kubernetes.io/control-plane"
+            operator: "Exists"
+            effect: "NoSchedule"
+          - key: "node-role.kubernetes.io/master"   # older clusters
+            operator: "Exists"
+            effect: "NoSchedule"
         imagePullSecrets:
           - name: docker-hub-cred
         containers:
@@ -27,8 +38,8 @@ data:
                 value: "arc,java"
             resources:
               requests:
-                cpu: "1"
-                memory: "2Gi"
+                cpu: "200m"
+                memory: "256Mi"
               limits:
-                cpu: "4"
-                memory: "6Gi"
+                cpu: "1"
+                memory: "1Gi"

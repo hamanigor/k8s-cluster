@@ -1,16 +1,3 @@
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: GitRepository
-metadata:
-  name: gha-runner-scale-set
-  namespace: gha-runner-scale-set
-spec:
-  interval: 5m
-  url: https://github.com/hamanigor/gha-runner-scale-set-helm-chart.git
-  ref:
-    tag: 0.12.1
-  secretRef:
-    name: github-secret
----
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -21,15 +8,13 @@ spec:
   targetNamespace: gha-runner-scale-set
   chart:
     spec:
-      chart: gha-runner-scale-set
-      sourceRef:
-        kind: GitRepository
-        name: gha-runner-scale-set
-      interval: 1m
+      chart: oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set
+      version: 0.12.1
   valuesFrom:
     - kind: ConfigMap
       name: gha-runner-scale-set-values-base
       valuesKey: values.yaml
+  # (Optional) keep only controllerServiceAccount here if you need it
   values:
     controllerServiceAccount:
       name: gha-runner-scale-set-controller-sa

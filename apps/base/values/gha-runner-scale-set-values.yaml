@@ -10,45 +10,93 @@ data:
 
     runnerScaleSetName: "arc-java"
     minRunners: 1
-    maxRunners: 2
+    maxRunners: 3
 
     controllerServiceAccount:
       name: gha-runner-scale-set-controller-sa
       namespace: gha-runner-scale-set-controller
 
-    # Enable Docker-in-Docker; chart injects dind + init + volumes automatically
     containerMode:
       type: dind
 
-    # Only override the runner container here (do NOT add dind/init/volumes)
     template:
       spec:
         imagePullSecrets:
           - name: docker-hub-cred
-        tolerations:
-          - key: "node-role.kubernetes.io/control-plane"
-            operator: "Exists"
-            effect: "NoSchedule"
-          - key: "node-role.kubernetes.io/master"
-            operator: "Exists"
-            effect: "NoSchedule"
-        containers:
-          - name: runner
-            image: 19901/runner-java:1.0.0  # must include /home/runner/run.sh & (optionally) JDK
-            # command is already set by chart; omit unless you need to change it
-            env:
-              - name: DOCKER_HOST
-                value: unix:///var/run/docker.sock
-              - name: RUNNER_WAIT_FOR_DOCKER_IN_SECONDS
-                value: "120"
-              - name: RUNNER_LABELS
-                value: "arc,java"
-              # - name: ACTIONS_RUNNER_DEBUG
-              #   value: "true"
-            resources:
-              requests:
-                cpu: "200m"
-                memory: "256Mi"
-              limits:
-                cpu: "1"
-                memory: "1Gi"
+
+    # Tolerate scheduling onto control-plane when needed
+    tolerations:
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"
+      - key: "node-role.kubernetes.io/master"
+        operator: "Exists"
+        effect: "NoSchedule"
+
+    # --- Begin injected DinD template (unchanged structure) ---
+    initContainers:
+      - name: init-dind-externals
+        image: ghcr.io/actions/actions-runner:latest
+        command: ["cp", "-r", "/home/runner/externals/.", "/home/runner/tmpDir/"]
+        volumeMounts:
+          - name: dind-externals
+            mountPath: /home/runner/tmpDir
+
+    containers:
+      # DinD sidecar (privileged)
+      - name: dind
+        image: docker:dind
+        args:
+          - dockerd
+          - --host=unix:///var/run/docker.sock
+          - --group=$(DOCKER_GROUP_GID)
+        env:
+          - name: DOCKER_GROUP_GID
+            value: "123"
+        securityContext:
+          privileged: true
+        startupProbe:
+          exec:
+            command: ["docker", "info"]
+          initialDelaySeconds: 0
+          failureThreshold: 24
+          periodSeconds: 5
+        volumeMounts:
+          - name: work
+            mountPath: /home/runner/_work
+          - name: dind-sock
+            mountPath: /var/run
+          - name: dind-externals
+            mountPath: /home/runner/externals
+
+      # Runner container (custom image here)
+      - name: runner
+        image: docker.io/19901/runner-java:1.0.1   # <-- your image; must contain /home/runner/run.sh
+        command: ["/home/runner/run.sh"]
+        env:
+          - name: DOCKER_HOST
+            value: unix:///var/run/docker.sock
+          - name: RUNNER_WAIT_FOR_DOCKER_IN_SECONDS
+            value: "120"
+          - name: RUNNER_LABELS
+            value: "arc,java"
+        resources:
+          requests:
+            cpu: "200m"
+            memory: "256Mi"
+          limits:
+            cpu: "1"
+            memory: "1Gi"
+        volumeMounts:
+          - name: work
+            mountPath: /home/runner/_work
+          - name: dind-sock
+            mountPath: /var/run
+
+    volumes:
+      - name: work
+        emptyDir: {}
+      - name: dind-sock
+        emptyDir: {}
+      - name: dind-externals
+        emptyDir: {}

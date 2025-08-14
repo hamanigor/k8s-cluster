@@ -12,19 +12,22 @@ data:
     minRunners: 1
     maxRunners: 2
 
+    # Bind RBAC to the controller SA
     controllerServiceAccount:
       name: gha-runner-scale-set-controller-sa
       namespace: gha-runner-scale-set-controller
 
+    # —— Kubernetes mode (no DinD) ——
     containerMode:
       type: kubernetes
-    
+
+    # REQUIRED in kubernetes mode (ephemeral PVC for work dir)
     kubernetesModeWorkVolumeClaim:
       accessModes: ["ReadWriteOnce"]
       storageClassName: "local-path"
       resources:
         requests:
-        storage: 5Gi
+          storage: 5Gi
 
     template:
       spec:
@@ -32,14 +35,14 @@ data:
           - key: "node-role.kubernetes.io/control-plane"
             operator: "Exists"
             effect: "NoSchedule"
-          - key: "node-role.kubernetes.io/master"   # older clusters
+          - key: "node-role.kubernetes.io/master"
             operator: "Exists"
             effect: "NoSchedule"
         imagePullSecrets:
           - name: docker-hub-cred
         containers:
           - name: runner
-            image: "docker.io/19901/runner-java:1.0.0"  
+            image: "docker.io/19901/runner-java:1.0.0"
             env:
               - name: RUNNER_LABELS
                 value: "arc,java"

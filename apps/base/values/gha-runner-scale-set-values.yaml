@@ -16,17 +16,15 @@ data:
       name: gha-runner-scale-set-controller-sa
       namespace: gha-runner-scale-set-controller
 
-    # Docker-in-Docker mode (chart will inject dind sidecar)
+    # Enable Docker-in-Docker; chart injects dind + init + volumes automatically
     containerMode:
       type: dind
 
-    # All pod customizations must live under template.spec
+    # Only override the runner container here (do NOT add dind/init/volumes)
     template:
       spec:
         imagePullSecrets:
           - name: docker-hub-cred
-
-        # Allow scheduling on a tainted control-plane node (if that's your only node)
         tolerations:
           - key: "node-role.kubernetes.io/control-plane"
             operator: "Exists"
@@ -34,47 +32,10 @@ data:
           - key: "node-role.kubernetes.io/master"
             operator: "Exists"
             effect: "NoSchedule"
-
-        # ----- begin injected DinD block (only runner image changed) -----
-        initContainers:
-          - name: init-dind-externals
-            image: ghcr.io/actions/actions-runner:2.319.1
-            command: ["cp", "-r", "/home/runner/externals/.", "/home/runner/tmpDir/"]
-            volumeMounts:
-              - name: dind-externals
-                mountPath: /home/runner/tmpDir
-
         containers:
-          # DinD sidecar (privileged)
-          - name: dind
-            image: docker:dind
-            args:
-              - dockerd
-              - --host=unix:///var/run/docker.sock
-              - --group=$(DOCKER_GROUP_GID)
-            env:
-              - name: DOCKER_GROUP_GID
-                value: "123"
-            securityContext:
-              privileged: true
-            startupProbe:
-              exec:
-                command: ["docker", "info"]
-              initialDelaySeconds: 0
-              failureThreshold: 24
-              periodSeconds: 5
-            volumeMounts:
-              - name: work
-                mountPath: /home/runner/_work
-              - name: dind-sock
-                mountPath: /var/run
-              - name: dind-externals
-                mountPath: /home/runner/externals
-
-          # Runner container (custom image here)
           - name: runner
-            image: docker.io/19901/runner-java:1.0.1   # must include /home/runner/run.sh (ideally built FROM ghcr.io/actions/actions-runner)
-            command: ["/home/runner/run.sh"]
+            image: docker.io/19901/runner-java:1.0.2  # must include /home/runner/run.sh & (optionally) JDK
+            # command is already set by chart; omit unless you need to change it
             env:
               - name: DOCKER_HOST
                 value: unix:///var/run/docker.sock
@@ -82,7 +43,6 @@ data:
                 value: "120"
               - name: RUNNER_LABELS
                 value: "arc,java"
-              # Optional: turn on verbose runner logs
               # - name: ACTIONS_RUNNER_DEBUG
               #   value: "true"
             resources:
@@ -92,17 +52,3 @@ data:
               limits:
                 cpu: "1"
                 memory: "1Gi"
-            volumeMounts:
-              - name: work
-                mountPath: /home/runner/_work
-              - name: dind-sock
-                mountPath: /var/run
-
-        volumes:
-          - name: work
-            emptyDir: {}
-          - name: dind-sock
-            emptyDir: {}
-          - name: dind-externals
-            emptyDir: {}
-        # ----- end injected DinD block -----

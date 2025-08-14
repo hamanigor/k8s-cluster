@@ -18,6 +18,7 @@ data:
 
     containerMode:
       type: kubernetes
+    
     kubernetesModeWorkVolumeClaim:
       accessModes: ["ReadWriteOnce"]
       storageClassName: "local-path"

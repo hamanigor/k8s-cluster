@@ -28,16 +28,13 @@ data:
           - key: "node-role.kubernetes.io/master"   # older clusters
             operator: "Exists"
             effect: "NoSchedule"
-        imagePullSecrets:
-          - name: docker-hub-cred
         containers:
           - name: runner
-            image: "docker.io/19901/runner-java:1.0.0"  
             env:
               - name: RUNNER_LABELS
                 value: "arc,java"
               - name: RUNNER_WAIT_FOR_DOCKER_IN_SECONDS
-                value: "120"
+                value: "30"
             resources:
               requests:
                 cpu: "200m"

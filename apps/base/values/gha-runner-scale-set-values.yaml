@@ -34,7 +34,7 @@ data:
             effect: "NoSchedule"
         containers:
           - name: runner
-            image: docker.io/19901/runner-java:1.0.2  # must include /home/runner/run.sh & (optionally) JDK
+            image: 19901/arc/runner-java:1.0.0  # must include /home/runner/run.sh & (optionally) JDK
             # command is already set by chart; omit unless you need to change it
             env:
               - name: DOCKER_HOST

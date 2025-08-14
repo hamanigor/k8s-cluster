@@ -8,13 +8,16 @@ spec:
   targetNamespace: gha-runner-scale-set
   chart:
     spec:
-      chart: oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set
+      chart: gha-runner-scale-set              # chart name inside the OCI repo
       version: 0.12.1
+      sourceRef:
+        kind: OCIRepository
+        name: arc-charts                       # the object you created above
+        namespace: gha-runner-scale-set
   valuesFrom:
     - kind: ConfigMap
       name: gha-runner-scale-set-values-base
       valuesKey: values.yaml
-  # (Optional) keep only controllerServiceAccount here if you need it
   values:
     controllerServiceAccount:
       name: gha-runner-scale-set-controller-sa

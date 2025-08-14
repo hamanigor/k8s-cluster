@@ -10,14 +10,20 @@ data:
 
     runnerScaleSetName: "arc-java"
     minRunners: 1
-    maxRunners: 10
+    maxRunners: 2
 
     controllerServiceAccount:
       name: gha-runner-scale-set-controller-sa
       namespace: gha-runner-scale-set-controller
 
     containerMode:
-      type: dind
+      type: kubernetes
+    kubernetesModeWorkVolumeClaim:
+      accessModes: ["ReadWriteOnce"]
+      storageClassName: "local-path"
+      resources:
+        requests:
+        storage: 5Gi
 
     template:
       spec:
